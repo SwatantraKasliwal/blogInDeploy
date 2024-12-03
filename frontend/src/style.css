@@ -1,0 +1,185 @@
+@import url("https://fonts.googleapis.com/css2?family=Jaro:opsz@6..72&family=Protest+Revolution&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+
+@import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&family=Edu+AU+VIC+WA+NT+Pre:wght@400..700&family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Protest+Revolution&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  text-decoration: none;
+  color: black;
+  scroll-behavior: smooth;
+}
+
+.navbar {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  padding: 5px;
+  position: sticky;
+  overflow: hidden;
+  top: 0;
+  font-family: "Edu AU VIC WA NT Pre", cursive;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  background-color: white;
+}
+
+.brand-name {
+  color: black;
+  font-family: "Protest Revolution", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  padding: 10px;
+  font-size: larger;
+}
+
+.nav-elements {
+  display: flex;
+  flex-direction: row;
+  text-align: center;
+  justify-content: left;
+  gap: 1rem;
+  align-items: center;
+  padding-right: 10px;
+  font-size: 1rem;
+}
+
+.nav-childelements ul {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  justify-content: left;
+  list-style-type: none;
+  font-family: "Edu AU VIC WA NT Pre", cursive;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+}
+
+.nav-btn {
+  font-family: "Edu AU VIC WA NT Pre", cursive;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+  background-color: transparent;
+  border: none;
+  padding: 3px;
+}
+.nav-btn:hover {
+  background-color: #f2bfa4;
+  border-radius: 20px;
+  padding: 3px;
+}
+.home-container {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  gap: 1rem;
+}
+.btn-element {
+  font-family: "Edu AU VIC WA NT Pre", cursive;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+  background-color: #f2bfa4;
+  border: none;
+  padding: 5px;
+  border-radius: 10px;
+}
+
+.btn-element:hover {
+  background-color: #f5e7de;
+}
+
+.home-element {
+  padding: 20px;
+  background-color: #fdf3ee;
+  border-radius: 20px;
+}
+
+.home-title {
+  font-family: "Cinzel", serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+  font-size: 1.5rem;
+}
+.home-content {
+  font-family: "Josefin Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+}
+
+.form-container {
+  width: 100%;
+  max-width: 400px;
+  margin: 10px auto;
+  padding: 20px;
+  background-color: #f3d8c9;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-element {
+  margin-bottom: 15px;
+}
+
+.form-element label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.form-element input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+.form-element textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+  height: 300px;
+  white-space: normal;
+  overflow-wrap: break-word;
+}
+
+.delete-btn {
+  background-color: #ec1a1a;
+  margin: 5px;
+}
+
+.about-container {
+  padding: 1rem;
+  background-color: #f5e7de;
+  margin: 0.5rem;
+  border-radius: 20px;
+  list-style-type: square;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 480px) {
+  .home-title {
+    font-size: 1.2rem;
+  }
+  .nav-elements {
+    font-size: 0.8rem;
+  }
+
+  .form-container {
+    width: 80%;
+  }
+
+  .about-container{
+    margin: 0.8rem;
+  }
+}
