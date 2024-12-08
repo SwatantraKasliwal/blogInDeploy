@@ -7,6 +7,7 @@ import { Strategy as LocalStrategy } from "passport-local";
 import session from "express-session";
 import cookieParser from "cookie-parser";
 import { createClient } from '@supabase/supabase-js'
+import axios from "axios";
 // const supabaseUrl = 'https://iqhkjmdkubgkftbnnajb.supabase.co'
 // const supabaseKey = process.env.SUPABASE_KEY
 // const supabase = createClient(supabaseUrl, supabaseKey)
@@ -15,6 +16,7 @@ import { createClient } from '@supabase/supabase-js'
 const app = express();
 const port = 3000;
 const saltRounds = 10;
+// const API = "https://iqhkjmdkubgkftbnnajb.supabase.co"
 
 app.use(express.json());
 app.use(cookieParser());
