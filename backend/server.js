@@ -6,6 +6,11 @@ import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import session from "express-session";
 import cookieParser from "cookie-parser";
+import { createClient } from '@supabase/supabase-js'
+// const supabaseUrl = 'https://iqhkjmdkubgkftbnnajb.supabase.co'
+// const supabaseKey = process.env.SUPABASE_KEY
+// const supabase = createClient(supabaseUrl, supabaseKey)
+
 
 const app = express();
 const port = 3000;
@@ -43,7 +48,7 @@ const db = new pg.Client({
   host: process.env.PG_HOST,
   database: process.env.PG_DATABASE,
   password: process.env.PG_PASS,
-  port: 5432,
+  port: 6543,
 });
 db.connect();
 
