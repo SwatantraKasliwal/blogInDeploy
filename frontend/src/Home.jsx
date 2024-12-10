@@ -7,7 +7,7 @@ function Home() {
 
   useEffect(() => {
     axios
-      .get("https://bloginserver.onrender.com")
+      .get("https://bloginserver.onrender.com/")
       .then((res) => {
         setBlogs(res.data);
         console.log(res.data);

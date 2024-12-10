@@ -27,7 +27,7 @@ function Register({ setIsAuthenticated, setUserId, setProfileName }) {
     if (password === confirmPass) {
       axios
         .post(
-          "http://localhost:3000/register",
+          "https://bloginserver.onrender.com/register",
           { userName, email, password },
           { withCredentials: true }
         )

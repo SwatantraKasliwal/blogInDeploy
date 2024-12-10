@@ -18,7 +18,7 @@ function Navigation() {
     setIsAuthenticated(false);
     setUserId(null);
     axios
-      .post("http://localhost:3000/logout", {}, { withCredentials: true })
+      .post("https://bloginserver.onrender.com/logout", {}, { withCredentials: true })
       .then((res) => {
         alert(res.data.message);
       });

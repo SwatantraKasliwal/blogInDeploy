@@ -9,7 +9,7 @@ function YourPost() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/yourpost", { withCredentials: true })
+      .get("https://bloginserver.onrender.com/yourpost", { withCredentials: true })
       .then((res) => {
         setYourBlogs(res.data);
         console.log(res.data);

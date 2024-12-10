@@ -20,7 +20,7 @@ function CreatePost({ authorId }) {
     event.preventDefault();
     axios
       .post(
-        "http://localhost:3000/createpost",
+        "https://bloginserver.onrender.com/createpost",
         { title, content, authorId},
         { withCredentials: true }
       )
