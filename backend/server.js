@@ -31,7 +31,7 @@ app.use(
     saveUninitialized: true,
     cookie: {
       httpOnly: true,
-      secure: false,
+      secure: true,
       maxAge: 24 * 60 * 60 * 1000, // 24 hours
     },
   })
@@ -72,6 +72,8 @@ app.get("/", async (req, res) => {
 });
 
 app.get("/yourpost", (req, res) => {
+  console.log("Authenticated:", req.isAuthenticated());
+  console.log("Session info:", req.session);
   if (req.isAuthenticated()) {
     const userId = req.user.id; // Authenticated user's ID from the session
     db.query(
