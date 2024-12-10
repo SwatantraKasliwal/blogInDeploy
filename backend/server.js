@@ -19,6 +19,7 @@ app.use(cookieParser());
 app.use(
   cors({
     origin: "https://blogin-8kyz.onrender.com",
+    methods: ['GET', 'POST'],
     credentials: true,
   })
 );

@@ -29,7 +29,7 @@ function YourPost() {
   const handleDeleteSubmit=(postId) =>(event)=>{
     event.preventDefault();
     console.log(postId);
-    axios.post("http://localhost:3000/delete", {postId},{ withCredentials: true })
+    axios.post("https://bloginserver.onrender.com/delete", {postId},{ withCredentials: true })
     .then((res)=>{
       console.log(res.data);
       setYourBlogs(yourBlogs.filter((blog) => blog.post_id !== postId));
