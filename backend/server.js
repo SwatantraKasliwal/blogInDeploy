@@ -415,17 +415,17 @@ app.post("/createpost", (req, res) => {
 });
 
 app.post("/login", passport.authenticate("local"), (req, res) => {
-  console.log("Authenticated (login):", req.isAuthenticated());
-  if (req.isAuthenticated()) {
+  req.session.save((err) => {
+    if (err) {
+      return res.status(500).json({ success: false, message: "Session save error" });
+    }
     res.json({
       success: true,
       message: "Login successful 😊",
       userId: req.user.id,
       userName: req.user.username,
     });
-  } else {
-    res.json({ success: false, message: "Please retry Login 😔" });
-  }
+  });
 });
 
 app.post("/register", async (req, res) => {
