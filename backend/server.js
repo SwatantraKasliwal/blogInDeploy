@@ -1,5 +1,5 @@
 import express from "express";
-import pg from "pg";
+import pkg from "pg";
 import cors from "cors";
 import env from "dotenv";
 import passport from "passport";
@@ -11,13 +11,14 @@ env.config();
 const app = express();
 const port = 3000;
 const saltRounds = 10;
+const {Pool} = pkg;
 
 app.use(express.json());
 app.use(cookieParser());
 
 app.use(
   cors({
-    origin: "https://blogin-8kyz.onrender.com",
+    origin: "http://localhost:5173",
     credentials: true,
   })
 );
@@ -38,12 +39,13 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-const db = new pg.Client({
+const db = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: {
     rejectUnauthorized: false, // Necessary for Neon connections
   },
 });
+
 db.connect((err) => {
   if (err) {
     console.error("Failed to connect to Neon database:", err.stack);

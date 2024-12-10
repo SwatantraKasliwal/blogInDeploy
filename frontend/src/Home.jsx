@@ -10,6 +10,7 @@ function Home() {
       .get("http://localhost:3000/")
       .then((res) => {
         setBlogs(res.data);
+        console.log(res.data);
       })
       .catch((err) => console.log(err));
   }, []);
