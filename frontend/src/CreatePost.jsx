@@ -26,7 +26,7 @@ function CreatePost({ authorId }) {
       )
       .then((res) => {
         console.log("Submitted Data:", { title, content, authorId});
-        // console.log(res.data);
+        console.log(res.data);
         alert("Post Created Successfully");
         navigate("/");
         setTitle("");

@@ -93,7 +93,7 @@ app.get("/yourpost", (req, res) => {
   }
 });
 
-app.post("/createpost", async (req, res) => {
+app.post("/createpost",(req, res) => {
   if (req.isAuthenticated()) {
     const { title, content, authorId } = req.body;
     const postDate = new Date().toISOString().slice(0, 10);
@@ -103,7 +103,7 @@ app.post("/createpost", async (req, res) => {
         .status(400)
         .json({ success: false, message: "Missing fields." });
     }
-    await db.query(
+    db.query(
       `INSERT INTO posts(post_title, post_content,post_date, post_author) values($1,$2,$3,$4) RETURNING *`,
       [title, content, postDate, authorId],
       (error, results) => {
