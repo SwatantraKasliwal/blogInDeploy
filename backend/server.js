@@ -304,14 +304,10 @@ app.get("/", async (req, res) => {
 
 app.post("/yourpost",async (req, res) => {
     const userId = req.body; // Authenticated user's ID from the session
-    if(userId == "undefined"){
-      res.json({success:false,message:"please log in or register"});
-    }else{
-      const result = await db.query(
+    const result = await db.query(
         `SELECT p.*, u.username FROM posts p JOIN userlogin u ON u.id = p.post_author WHERE p.post_author = $1 ORDER BY p.post_id DESC`,
         [userId]);
         res.json({success:true,data:result.rows});
-    }
 });
 
 app.post("/createpost", (req, res) => {

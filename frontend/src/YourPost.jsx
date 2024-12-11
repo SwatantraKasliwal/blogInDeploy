@@ -11,8 +11,8 @@ function YourPost({userId}) {
     axios
       .post("https://bloginserver.onrender.com/yourpost",{userId}, { withCredentials: true })
       .then((res) => {
-        setYourBlogs(res.data);
         console.log(res.data);
+        setYourBlogs(res.data);
       })
       .catch((err) => {
         console.error(err);
