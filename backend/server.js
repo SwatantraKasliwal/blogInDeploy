@@ -270,7 +270,7 @@ app.use(express.json());
 
 app.use(
   cors({
-    origin: "https://blogin-8kyz.onrender.com",
+    origin: ["https://blogin-8kyz.onrender.com","http://localhost:5173"],
     methods: ["GET", "POST"],
     credentials: true,
   })
