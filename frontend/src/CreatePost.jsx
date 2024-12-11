@@ -56,7 +56,7 @@ function CreatePost({ authorId }) {
 
   return (
     <div className="form-container">
-      <form action="" onSubmit={handelSubmit}>
+      <form action="" onSubmit={handelSubmit} id="create-post-form">
         <div className="form-element">
           <div>
             <label htmlFor="title">Title</label>

@@ -42,7 +42,7 @@ function Login({ setIsAuthenticated, setUserId, setProfileName }) {
 
   return (
     <div className="form-container">
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} id="login-form">
         <div className="form-element">
           <div>
             <label htmlFor="email">Enter your email:</label>

@@ -54,7 +54,7 @@ function Register({ setIsAuthenticated, setUserId, setProfileName }) {
 
   return (
     <div className="form-container">
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} id="registration-form">
         <div className="form-element">
           <div>
             <label htmlFor="username">User Name:</label>
