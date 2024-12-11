@@ -430,6 +430,7 @@ app.post("/login", (req, res) => {
   //   });
   // });
   const { username, password } = req.body;
+  console.log("this are the user and password from /login: ", username, password)
   const result = db.query("SELECT * FROM userlogin WHERE email=$1", [username]);
   if (result.rows.length > 0) {
     const user = result.rows[0];
