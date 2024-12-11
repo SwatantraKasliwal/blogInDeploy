@@ -77,9 +77,9 @@
 //   if (req.isAuthenticated()) {
 //     const userId = req.user.id; // Authenticated user's ID from the session
 //     db.query(
-//       `SELECT p.*, u.username 
-//        FROM posts p 
-//        JOIN userlogin u ON u.id = p.post_author 
+//       `SELECT p.*, u.username
+//        FROM posts p
+//        JOIN userlogin u ON u.id = p.post_author
 //        WHERE p.post_author = $1
 //        ORDER BY p.post_id DESC`,
 //       [userId],
@@ -255,10 +255,10 @@ import express from "express";
 import pkg from "pg";
 import cors from "cors";
 import env from "dotenv";
-import passport from "passport";
-import { Strategy as LocalStrategy } from "passport-local";
-import session from "express-session";
-import cookieParser from "cookie-parser";
+// import passport from "passport";
+// import { Strategy as LocalStrategy } from "passport-local";
+// import session from "express-session";
+// import cookieParser from "cookie-parser";
 env.config();
 
 const app = express();
@@ -266,31 +266,31 @@ const port = 3000;
 const { Pool } = pkg;
 
 app.use(express.json());
-app.use(cookieParser());
+// app.use(cookieParser());
 
 app.use(
   cors({
     origin: "https://blogin-8kyz.onrender.com",
-    methods: ['GET', 'POST'],
+    methods: ["GET", "POST"],
     credentials: true,
   })
 );
 
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false, // Ensure the session is only saved when it is modified
-    cookie: {
-      httpOnly: true,
-      secure: true,
-      maxAge: 24 * 60 * 60 * 1000, // 24 hours
-    },
-  })
-);
+// app.use(
+//   session({
+//     secret: process.env.SESSION_SECRET,
+//     resave: false,
+//     saveUninitialized: false, // Ensure the session is only saved when it is modified
+//     cookie: {
+//       httpOnly: true,
+//       secure: true,
+//       maxAge: 24 * 60 * 60 * 1000, // 24 hours
+//     },
+//   })
+// );
 
-app.use(passport.initialize());
-app.use(passport.session());
+// app.use(passport.initialize());
+// app.use(passport.session());
 
 const db = new Pool({
   connectionString: process.env.DATABASE_URL,
@@ -308,47 +308,50 @@ db.connect((err) => {
 });
 
 // Passport Local Strategy
-passport.use(
-  new LocalStrategy(async function verify(username, password, cb) {
-    try {
-      const result = await db.query("SELECT * FROM userlogin WHERE email=$1", [username]);
-      if (result.rows.length > 0) {
-        const user = result.rows[0];
-        const storedPassword = user.password;
-        if (password === storedPassword) {
-          return cb(null, user);
-        } else {
-          return cb(null, false, { message: "Incorrect password" });
-        }
-      } else {
-        return cb(null, false, { message: "Incorrect email" });
-      }
-    } catch (err) {
-      return cb(err);
-    }
-  })
-);
+// passport.use(
+//   new LocalStrategy(async function verify(username, password, cb) {
+//     try {
+//       const result = await db.query("SELECT * FROM userlogin WHERE email=$1", [
+//         username,
+//       ]);
+//       if (result.rows.length > 0) {
+//         const user = result.rows[0];
+//         const storedPassword = user.password;
+//         if (password === storedPassword) {
+//           return cb(null, user);
+//         } else {
+//           return cb(null, false, { message: "Incorrect password" });
+//         }
+//       } else {
+//         return cb(null, false, { message: "Incorrect email" });
+//       }
+//     } catch (err) {
+//       return cb(err);
+//     }
+//   })
+// );
 
-passport.serializeUser((user, done) => {
-  done(null, user.id);
-});
+// passport.serializeUser((user, done) => {
+//   done(null, user.id);
+// });
 
-passport.deserializeUser(async (id, done) => {
-  try {
-    const result = await db.query("SELECT * FROM userlogin WHERE id=$1", [id]);
-    if (result.rows.length > 0) {
-      done(null, result.rows[0]);
-    } else {
-      done(new Error("User not found"));
-    }
-  } catch (err) {
-    done(err);
-  }
-});
+// passport.deserializeUser(async (id, done) => {
+//   try {
+//     const result = await db.query("SELECT * FROM userlogin WHERE id=$1", [id]);
+//     if (result.rows.length > 0) {
+//       done(null, result.rows[0]);
+//     } else {
+//       done(new Error("User not found"));
+//     }
+//   } catch (err) {
+//     done(err);
+//   }
+// });
 
 // Routes
 app.get("/", async (req, res) => {
-  const query = "SELECT p.*, u.username FROM posts p JOIN userlogin u ON u.id = p.post_author ORDER BY p.post_id DESC";
+  const query =
+    "SELECT p.*, u.username FROM posts p JOIN userlogin u ON u.id = p.post_author ORDER BY p.post_id DESC";
   try {
     db.query(query, (err, data) => {
       if (err) {
@@ -414,23 +417,39 @@ app.post("/createpost", (req, res) => {
   }
 });
 
-app.post("/login", passport.authenticate("local"), (req, res) => {
-  req.session.save((err) => {
-    if (err) {
-      return res.status(500).json({ success: false, message: "Session save error" });
+app.post("/login", (req, res) => {
+  // req.session.save((err) => {
+  //   if (err) {
+  //     return res.status(500).json({ success: false, message: "Session save error" });
+  //   }
+  //   res.json({
+  //     success: true,
+  //     message: "Login successful 😊",
+  //     userId: req.user.id,
+  //     userName: req.user.username,
+  //   });
+  // });
+  const { username, password } = req.body;
+  const result = db.query("SELECT * FROM userlogin WHERE email=$1", [username]);
+  if (result.rows.length > 0) {
+    const user = result.rows[0];
+    const storedPassword = user.password;
+    if (storedPassword == password) {
+      return res.json({
+        success: true,
+        message: "Login successful 😊",
+        userId: user.id,
+        userName: user.username,
+      });
     }
-    res.json({
-      success: true,
-      message: "Login successful 😊",
-      userId: req.user.id,
-      userName: req.user.username,
-    });
-  });
+  }
 });
 
 app.post("/register", async (req, res) => {
   const { userName, email, password } = req.body;
-  const checkUser = await db.query("SELECT * FROM userlogin WHERE email=$1", [email]);
+  const checkUser = await db.query("SELECT * FROM userlogin WHERE email=$1", [
+    email,
+  ]);
   if (checkUser.rows.length > 0) {
     res.json({
       success: false,
@@ -441,40 +460,56 @@ app.post("/register", async (req, res) => {
       "INSERT INTO userlogin(username, email, password) VALUES ($1, $2, $3)",
       [userName, email, password]
     );
-    const result = await db.query("SELECT * FROM userlogin WHERE email=$1", [email]);
+    const result = await db.query("SELECT * FROM userlogin WHERE email=$1", [
+      email,
+    ]);
     const user = result.rows[0];
-    req.login(user, (err) => {
-      if (err) {
-        return res
-          .status(500)
-          .json({ success: false, message: "Error logging in user." });
-      }
-      res.json({
-        success: true,
-        message: "Login Successful 😊",
-        userId: user.id,
-        userName: user.username,
-      });
-    });
+    // req.login(user, (err) => {
+    //   if (err) {
+    //     return res
+    //       .status(500)
+    //       .json({ success: false, message: "Error logging in user." });
+    //   }
+    //   res.json({
+    //     success: true,
+    //     message: "Login Successful 😊",
+    //     userId: user.id,
+    //     userName: user.username,
+    //   });
+    // });
+  (user, (err) => {
+  if (err) {
+    return res
+      .status(500)
+      .json({ success: false, message: "Error logging in user." });
+  }
+  res.json({
+    success: true,
+    message: "Login Successful 😊",
+    userId: user.id,
+    userName: user.username,
+  });
+});
   }
 });
 
 app.post("/logout", (req, res) => {
-  req.logout((err) => {
-    if (err) {
-      return res
-        .status(500)
-        .json({ success: false, message: "Error logging out." });
-    }
-    req.session.destroy((err) => {
-      if (err) {
-        return res
-          .status(500)
-          .json({ success: false, message: "Error destroying session." });
-      }
-      res.json({ success: true, message: "Logged out successfully." });
-    });
-  });
+  // req.logout((err) => {
+  //   if (err) {
+  //     return res
+  //       .status(500)
+  //       .json({ success: false, message: "Error logging out." });
+  //   }
+  //   req.session.destroy((err) => {
+  //     if (err) {
+  //       return res
+  //         .status(500)
+  //         .json({ success: false, message: "Error destroying session." });
+  //     }
+  //     res.json({ success: true, message: "Logged out successfully." });
+  //   });
+  // });
+  res.json({success:true,message:"Logged out successfully"});
 });
 
 app.post("/delete", (req, res) => {
