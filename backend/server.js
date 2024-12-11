@@ -255,19 +255,13 @@ import express from "express";
 import pkg from "pg";
 import cors from "cors";
 import env from "dotenv";
-// import passport from "passport";
-// import { Strategy as LocalStrategy } from "passport-local";
-// import session from "express-session";
-// import cookieParser from "cookie-parser";
-env.config();
 
+env.config();
 const app = express();
 const port = 3000;
 const { Pool } = pkg;
 
 app.use(express.json());
-// app.use(cookieParser());
-
 app.use(
   cors({
     origin: ["https://blogin-8kyz.onrender.com","http://localhost:5173"],
@@ -275,22 +269,6 @@ app.use(
     credentials: true,
   })
 );
-
-// app.use(
-//   session({
-//     secret: process.env.SESSION_SECRET,
-//     resave: false,
-//     saveUninitialized: false, // Ensure the session is only saved when it is modified
-//     cookie: {
-//       httpOnly: true,
-//       secure: true,
-//       maxAge: 24 * 60 * 60 * 1000, // 24 hours
-//     },
-//   })
-// );
-
-// app.use(passport.initialize());
-// app.use(passport.session());
 
 const db = new Pool({
   connectionString: process.env.DATABASE_URL,
@@ -306,47 +284,6 @@ db.connect((err) => {
     console.log("Connected to Neon database successfully!");
   }
 });
-
-// Passport Local Strategy
-// passport.use(
-//   new LocalStrategy(async function verify(username, password, cb) {
-//     try {
-//       const result = await db.query("SELECT * FROM userlogin WHERE email=$1", [
-//         username,
-//       ]);
-//       if (result.rows.length > 0) {
-//         const user = result.rows[0];
-//         const storedPassword = user.password;
-//         if (password === storedPassword) {
-//           return cb(null, user);
-//         } else {
-//           return cb(null, false, { message: "Incorrect password" });
-//         }
-//       } else {
-//         return cb(null, false, { message: "Incorrect email" });
-//       }
-//     } catch (err) {
-//       return cb(err);
-//     }
-//   })
-// );
-
-// passport.serializeUser((user, done) => {
-//   done(null, user.id);
-// });
-
-// passport.deserializeUser(async (id, done) => {
-//   try {
-//     const result = await db.query("SELECT * FROM userlogin WHERE id=$1", [id]);
-//     if (result.rows.length > 0) {
-//       done(null, result.rows[0]);
-//     } else {
-//       done(new Error("User not found"));
-//     }
-//   } catch (err) {
-//     done(err);
-//   }
-// });
 
 // Routes
 app.get("/", async (req, res) => {
@@ -417,34 +354,41 @@ app.post("/createpost", (req, res) => {
   }
 });
 
-app.post("/login", (req, res) => {
-  // req.session.save((err) => {
-  //   if (err) {
-  //     return res.status(500).json({ success: false, message: "Session save error" });
-  //   }
-  //   res.json({
-  //     success: true,
-  //     message: "Login successful 😊",
-  //     userId: req.user.id,
-  //     userName: req.user.username,
-  //   });
-  // });
+app.post("/login", async (req, res) => {
   const { username, password } = req.body;
-  console.log("this are the user and password from /login: ", username, password)
-  const result = db.query("SELECT * FROM userlogin WHERE email=$1", [username]);
-  if (result.rows.length > 0) {
+  try {
+    console.log("Received login request for:", username);
+    // Query the database for the user
+    const result = await db.query("SELECT * FROM userlogin WHERE email = $1", [
+      username,
+    ]);
+    // Check if the user exists
+    if (result.rows.length === 0) {
+      return res
+        .status(401)
+        .json({ success: false, message: "Invalid email or password." });
+    }
     const user = result.rows[0];
     const storedPassword = user.password;
-    if (storedPassword == password) {
+    // Compare passwords (in a real application, use bcrypt for hashing)
+    if (storedPassword === password) {
       return res.json({
         success: true,
         message: "Login successful 😊",
         userId: user.id,
         userName: user.username,
       });
+    } else {
+      return res
+        .status(401)
+        .json({ success: false, message: "Invalid email or password." });
     }
+  } catch (error) {
+    console.error("Error during login:", error);
+    return res.status(500).json({ success: false, message: "Server error." });
   }
 });
+
 
 app.post("/register", async (req, res) => {
   const { userName, email, password } = req.body;
@@ -465,19 +409,6 @@ app.post("/register", async (req, res) => {
       email,
     ]);
     const user = result.rows[0];
-    // req.login(user, (err) => {
-    //   if (err) {
-    //     return res
-    //       .status(500)
-    //       .json({ success: false, message: "Error logging in user." });
-    //   }
-    //   res.json({
-    //     success: true,
-    //     message: "Login Successful 😊",
-    //     userId: user.id,
-    //     userName: user.username,
-    //   });
-    // });
   (user, (err) => {
   if (err) {
     return res
@@ -495,21 +426,6 @@ app.post("/register", async (req, res) => {
 });
 
 app.post("/logout", (req, res) => {
-  // req.logout((err) => {
-  //   if (err) {
-  //     return res
-  //       .status(500)
-  //       .json({ success: false, message: "Error logging out." });
-  //   }
-  //   req.session.destroy((err) => {
-  //     if (err) {
-  //       return res
-  //         .status(500)
-  //         .json({ success: false, message: "Error destroying session." });
-  //     }
-  //     res.json({ success: true, message: "Logged out successfully." });
-  //   });
-  // });
   res.json({success:true,message:"Logged out successfully"});
 });
 
