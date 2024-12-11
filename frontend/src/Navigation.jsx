@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import CreatePost from "./CreatePost";
 import Home from "./Home";
@@ -21,6 +21,7 @@ function Navigation() {
       .post("https://bloginserver.onrender.com/logout", {}, { withCredentials: true })
       .then((res) => {
         alert(res.data.message);
+        useNavigate("/");
       });
   }
 
@@ -111,7 +112,7 @@ function Navigation() {
                 path="/createpost"
                 element={<CreatePost authorId={userId} />}
               />
-              <Route path="/yourpost" element={<YourPost />} />
+              <Route path="/yourpost" element={<YourPost userId ={userId} />} />
             </>
           )}
         </Routes>

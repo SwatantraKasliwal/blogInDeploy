@@ -302,30 +302,19 @@ app.get("/", async (req, res) => {
   }
 });
 
-app.get("/yourpost", (req, res) => {
-  console.log("Authenticated:", req.isAuthenticated());
-  console.log("Session info:", req.session);
-  if (req.isAuthenticated()) {
-    const userId = req.user.id; // Authenticated user's ID from the session
-    db.query(
-      `SELECT p.*, u.username FROM posts p JOIN userlogin u ON u.id = p.post_author WHERE p.post_author = $1 ORDER BY p.post_id DESC`,
-      [userId],
-      (err, data) => {
-        if (err) {
-          console.error("Database query error:", err);
-          return res.status(500).json({ error: "Internal Server Error" });
-        }
-        return res.json(data.rows);
-      }
-    );
-  } else {
-    res.status(401).json({ error: "Unauthorized access" });
-  }
+app.get("/yourpost",async (req, res) => {
+    const userId = req.body; // Authenticated user's ID from the session
+    if(userId == "undefined"){
+      res.json({success:false,message:"please log in or register"});
+    }else{
+      const result = await db.query(
+        `SELECT p.*, u.username FROM posts p JOIN userlogin u ON u.id = p.post_author WHERE p.post_author = $1 ORDER BY p.post_id DESC`,
+        [userId]);
+        res.json({success:true,data:result.rows});
+    }
 });
 
 app.post("/createpost", (req, res) => {
-  console.log("Authenticated (createpost):", req.isAuthenticated());
-  if (req.isAuthenticated()) {
     const { title, content, authorId } = req.body;
     const postDate = new Date().toISOString().slice(0, 10);
     console.log("Received Data:", { title, content, authorId, postDate });
@@ -347,22 +336,15 @@ app.post("/createpost", (req, res) => {
         res.status(201).json({ success: true, post: results.rows[0] });
       }
     );
-  } else {
-    return res
-      .status(401)
-      .json({ error: "Unauthorized access. Please log in to create a post." });
-  }
 });
 
 app.post("/login", async (req, res) => {
   const { username, password } = req.body;
   try {
     console.log("Received login request for:", username);
-    // Query the database for the user
     const result = await db.query("SELECT * FROM userlogin WHERE email = $1", [
       username,
     ]);
-    // Check if the user exists
     if (result.rows.length === 0) {
       return res
         .status(401)
@@ -370,7 +352,6 @@ app.post("/login", async (req, res) => {
     }
     const user = result.rows[0];
     const storedPassword = user.password;
-    // Compare passwords (in a real application, use bcrypt for hashing)
     if (storedPassword === password) {
       return res.json({
         success: true,
@@ -405,23 +386,10 @@ app.post("/register", async (req, res) => {
       "INSERT INTO userlogin(username, email, password) VALUES ($1, $2, $3)",
       [userName, email, password]
     );
-    const result = await db.query("SELECT * FROM userlogin WHERE email=$1", [
-      email,
-    ]);
-    const user = result.rows[0];
-  (user, (err) => {
-  if (err) {
-    return res
-      .status(500)
-      .json({ success: false, message: "Error logging in user." });
-  }
   res.json({
     success: true,
-    message: "Login Successful 😊",
-    userId: user.id,
-    userName: user.username,
+    message: "Registration Successful 😊 ,please login ",
   });
-});
   }
 });
 

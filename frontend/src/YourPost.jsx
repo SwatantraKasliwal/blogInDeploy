@@ -2,14 +2,14 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-function YourPost() {
+function YourPost({userId}) {
   const [yourBlogs, setYourBlogs] = useState([]);
   const [expandedPosts, setExpandedPosts] = useState({});
   const navigate = useNavigate();
 
   useEffect(() => {
     axios
-      .get("https://bloginserver.onrender.com/yourpost", { withCredentials: true })
+      .get("https://bloginserver.onrender.com/yourpost",{userId}, { withCredentials: true })
       .then((res) => {
         setYourBlogs(res.data);
         console.log(res.data);

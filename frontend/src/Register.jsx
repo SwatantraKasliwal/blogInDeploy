@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-function Register({ setIsAuthenticated, setUserId, setProfileName }) {
+function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPass, setConfirmPass] = useState("");
@@ -36,9 +36,7 @@ function Register({ setIsAuthenticated, setUserId, setProfileName }) {
           alert(res.data.message);
           if (res.data.success) {
             navigate("/");
-            setIsAuthenticated(true);
-            setUserId(res.data.userId);
-            setProfileName(res.data.userName);
+            alert(res.data.message);
           } else {
             alert(res.data.message);
             navigate("/login");

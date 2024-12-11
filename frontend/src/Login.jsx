@@ -29,6 +29,7 @@ function Login({ setIsAuthenticated, setUserId, setProfileName }) {
           setIsAuthenticated(true);
           setUserId(res.data.userId);
           setProfileName(res.data.userName);
+          alert(res.data.message);
           navigate("/");
         } else {
           alert(res.data.message);
