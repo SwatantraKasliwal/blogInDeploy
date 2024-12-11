@@ -302,7 +302,7 @@ app.get("/", async (req, res) => {
   }
 });
 
-app.get("/yourpost",async (req, res) => {
+app.post("/yourpost",async (req, res) => {
     const userId = req.body; // Authenticated user's ID from the session
     if(userId == "undefined"){
       res.json({success:false,message:"please log in or register"});
@@ -397,28 +397,15 @@ app.post("/logout", (req, res) => {
   res.json({success:true,message:"Logged out successfully"});
 });
 
-app.post("/delete", (req, res) => {
-  console.log("Authenticated (delete):", req.isAuthenticated());
-  if (req.isAuthenticated()) {
-    const userId = req.user.id;
-    const { postId } = req.body;
-    console.log("this is from /delete section: ", userId, postId);
-    db.query(
+app.post("/delete",async (req, res) => {
+  const {userId, postId } = req.body;
+  console.log("this is from /delete section: ", userId, postId);
+    const result =db.query(
       "DELETE from posts WHERE post_id=$1 AND post_author=$2",
-      [postId, userId],
-      (err, result) => {
-        if (err) {
-          console.error("Database query error:", err);
-          return res.status(500).json({ error: "Internal Server Error" });
-        }
+      [postId, userId]);
         return res
           .status(200)
           .json({ success: true, message: "Post deleted successfully." });
-      }
-    );
-  } else {
-    return res.status(401).json({ error: "Unauthorized access" });
-  }
 });
 
 app.listen(port, () => {

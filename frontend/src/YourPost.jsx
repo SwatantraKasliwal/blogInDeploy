@@ -9,7 +9,7 @@ function YourPost({userId}) {
 
   useEffect(() => {
     axios
-      .get("https://bloginserver.onrender.com/yourpost",{userId}, { withCredentials: true })
+      .post("https://bloginserver.onrender.com/yourpost",{userId}, { withCredentials: true })
       .then((res) => {
         setYourBlogs(res.data);
         console.log(res.data);
@@ -29,12 +29,16 @@ function YourPost({userId}) {
   const handleDeleteSubmit=(postId) =>(event)=>{
     event.preventDefault();
     console.log(postId);
-    axios.post("https://bloginserver.onrender.com/delete", {postId},{ withCredentials: true })
+    axios.post("https://bloginserver.onrender.com/delete", {userId, postId},{ withCredentials: true })
     .then((res)=>{
-      console.log(res.data);
-      setYourBlogs(yourBlogs.filter((blog) => blog.post_id !== postId));
-      alert(res.data.message);
-      navigate("/yourpost");
+      if(res.data.success){
+        console.log(res.data);
+        setYourBlogs(yourBlogs.filter((blog) => blog.post_id !== postId));
+        alert(res.data.message);
+        navigate("/yourpost");
+      }else{
+        alert("Error deleting the post");
+      }
     }).catch(err=>{
       console.log("This is the error in the delete section", err);
       alert("Error Deleting the post");
