@@ -11,13 +11,13 @@ function YourPost({userId}) {
     axios
       .post("https://bloginserver.onrender.com/yourpost",{userId}, { withCredentials: true })
       .then((res) => {
-        console.log(res.data);
-        setYourBlogs(res.data);
+        console.log(res.data.data);
+        setYourBlogs(res.data.data);
       })
       .catch((err) => {
         console.error(err);
       });
-  }, []);
+  }, [userId]);
 
   const toggleExpand = (index) => {
     setExpandedPosts((prevExpandedPosts) => ({

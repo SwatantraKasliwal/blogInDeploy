@@ -302,13 +302,26 @@ app.get("/", async (req, res) => {
   }
 });
 
-app.post("/yourpost",async (req, res) => {
-    const userId = req.body; // Authenticated user's ID from the session
+app.post("/yourpost", async (req, res) => {
+  const { userId } = req.body; // Extract userId from the request body
+  if (!userId) {
+    return res.status(400).json({ success: false, message: "Login issue, Retry Login" });
+  }
+  try {
     const result = await db.query(
-        `SELECT p.*, u.username FROM posts p JOIN userlogin u ON u.id = p.post_author WHERE p.post_author = $1 ORDER BY p.post_id DESC`,
-        [userId]);
-        res.json({success:true,data:result.rows});
+      `SELECT p.*, u.username FROM posts p 
+       JOIN userlogin u ON u.id = p.post_author 
+       WHERE p.post_author = $1 
+       ORDER BY p.post_id DESC`,
+      [userId]
+    );
+    return res.json({ success: true, data: result.rows });
+  } catch (error) {
+    console.error("Error fetching user posts:", error);
+    return res.status(500).json({ success: false, message: "Server error." });
+  }
 });
+
 
 app.post("/createpost", (req, res) => {
     const { title, content, authorId } = req.body;
