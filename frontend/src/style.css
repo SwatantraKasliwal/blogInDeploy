@@ -1,6 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Jaro:opsz@6..72&family=Protest+Revolution&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
-
-@import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&family=Edu+AU+VIC+WA+NT+Pre:wght@400..700&family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Protest+Revolution&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Protest+Revolution&display=swap');
 
 * {
   margin: 0;
@@ -8,6 +6,8 @@
   text-decoration: none;
   color: black;
   scroll-behavior: smooth;
+  font-family: "Poppins", sans-serif;
+  font-style: normal;
 }
 
 .navbar {
@@ -18,18 +18,10 @@
   position: sticky;
   overflow: hidden;
   top: 0;
-  font-family: "Edu AU VIC WA NT Pre", cursive;
-  font-optical-sizing: auto;
-  font-weight: 400;
-  font-style: normal;
   background-color: white;
 }
 
 .brand-name {
-  color: black;
-  font-family: "Protest Revolution", sans-serif;
-  font-weight: 400;
-  font-style: normal;
   padding: 10px;
   font-size: larger;
 }
@@ -51,15 +43,11 @@
   gap: 1rem;
   justify-content: left;
   list-style-type: none;
-  font-family: "Edu AU VIC WA NT Pre", cursive;
-  font-optical-sizing: auto;
   font-weight: 300;
   font-style: normal;
 }
 
 .nav-btn {
-  font-family: "Edu AU VIC WA NT Pre", cursive;
-  font-optical-sizing: auto;
   font-weight: 300;
   font-style: normal;
   background-color: transparent;
@@ -67,51 +55,62 @@
   padding: 3px;
 }
 .nav-btn:hover {
-  background-color: #f2bfa4;
+  /* background-color: #f2bfa4; */
+  background-color: #cbedfa;
   border-radius: 20px;
   padding: 3px;
 }
-.home-container {
-  display: flex;
-  flex-direction: column;
-  padding: 10px;
-  gap: 1rem;
-}
+
 .btn-element {
-  font-family: "Edu AU VIC WA NT Pre", cursive;
-  font-optical-sizing: auto;
-  font-weight: 500;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
   font-style: normal;
-  background-color: #f2bfa4;
+  background-color: #ffff;
   border: none;
   padding: 5px;
   border-radius: 10px;
 }
 
 .btn-element:hover {
-  background-color: #f5e7de;
+  background-color: #000000;
+  color: white;
+}
+
+.home-container {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  gap: 1rem;
 }
 
 .home-element {
   padding: 20px;
-  background-color: #fdf3ee;
+  background-color: #cbedfa;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   border-radius: 20px;
 }
 
 .home-title {
-  font-family: "Cinzel", serif;
-  font-optical-sizing: auto;
-  font-weight: 300;
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
   font-style: normal;
   font-size: 1.5rem;
 }
 .home-content {
-  font-family: "Josefin Sans", sans-serif;
-  font-optical-sizing: auto;
+  font-family: "Poppins", sans-serif;
   font-weight: 400;
   font-style: normal;
   white-space: pre-wrap;
   overflow-wrap: break-word;
+}
+
+@keyframes gradientFill {
+  0% {
+    background-position: bottom;
+  }
+  100% {
+    background-position: top;
+  }
 }
 
 .form-container {
@@ -119,10 +118,14 @@
   max-width: 400px;
   margin: 10px auto;
   padding: 20px;
-  background-color: #f3d8c9;
+  /* background-color: #e2e1e0; */
+  background-image: linear-gradient(to top, #a1e2fc, white);
+  background-size: 100% 200%; /* Ensure the gradient covers the entire element */
+  animation: gradientFill 1s ease 1; /* Apply the animation */
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
+
 
 .form-element {
   margin-bottom: 15px;
@@ -160,7 +163,7 @@
 
 .about-container {
   padding: 1rem;
-  background-color: #f5e7de;
+  background-color:#cbedfa;
   margin: 0.5rem;
   border-radius: 20px;
   list-style-type: square;
