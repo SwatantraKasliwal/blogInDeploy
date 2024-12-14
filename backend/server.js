@@ -101,24 +101,23 @@ app.post("/login", async (req, res) => {
     const result = await db.query("SELECT * FROM userlogin WHERE email = $1", [
       username,
     ]);
-    if (result.rows.length === 0) {
+    if (result.rows.length == 0) {
       return res
         .status(401)
-        .json({ success: false, message: "PLease resgister" });
-    }
-    const user = result.rows[0];
-    const storedPassword = user.password;
-    if (storedPassword === password) {
-      return res.json({
-        success: true,
-        message: "Login successful 😊",
-        userId: user.id,
-        userName: user.username,
-      });
-    } else {
-      return res
-        .status(401)
-        .json({ success: false, message: "Invalid email or password." });
+        .json({ success: false, message: "Your are not register please register" });
+    }else{
+      const user = result.rows[0];
+      const storedPassword = user.password;
+      if (storedPassword === password) {
+        return res.json({
+          success: true,
+          message: "Login successful 😊",
+          userId: user.id,
+          userName: user.username,
+        });
+      } else {
+        return res.json({ success: false, message: "Password Incorrect." });
+      }
     }
   } catch (error) {
     console.error("Error during login:", error);

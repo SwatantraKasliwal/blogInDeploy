@@ -24,8 +24,8 @@ function Login({ setIsAuthenticated, setUserId, setProfileName }) {
         { withCredentials: true }
       )
       .then((res) => {
-        console.log(res.data);
         if (res.data.success) {
+          console.log("Response received:", res.data);
           setIsAuthenticated(true);
           setUserId(res.data.userId);
           setProfileName(res.data.userName);
@@ -33,11 +33,18 @@ function Login({ setIsAuthenticated, setUserId, setProfileName }) {
           navigate("/");
         } else {
           alert(res.data.message);
-          navigate("/login");
+          setTimeout(() => {
+            navigate("/login");
+          }, 2000);
         }
       })
       .catch((err) => {
-        console.log(err);
+        alert(
+          "Error: " + err.response.data.message || "An unknown error occurred."
+        );
+        setTimeout(() => {
+          navigate("/login");
+        }, 2000);
       });
   }
 
