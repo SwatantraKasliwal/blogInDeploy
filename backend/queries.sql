@@ -13,7 +13,3 @@ create table posts(
 	post_author int references userlogin(id) 
 );
 
-// getting all the posts
-SELECT p.*, u.username 
-FROM posts p 
-JOIN userlogin u ON u.id = p.post_author;
