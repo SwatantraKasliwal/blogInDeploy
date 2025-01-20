@@ -2,14 +2,18 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-function YourPost({userId}) {
+function YourPost({ userId }) {
   const [yourBlogs, setYourBlogs] = useState([]);
   const [expandedPosts, setExpandedPosts] = useState({});
   const navigate = useNavigate();
 
   useEffect(() => {
     axios
-      .post("https://bloginserver.onrender.com/yourpost",{userId}, { withCredentials: true })
+      .post(
+        "https://bloginserver.onrender.com/yourpost",
+        { userId },
+        { withCredentials: true }
+      )
       .then((res) => {
         console.log(res.data.data);
         setYourBlogs(res.data.data);
@@ -26,24 +30,30 @@ function YourPost({userId}) {
     }));
   };
 
-  const handleDeleteSubmit=(postId) =>(event)=>{
+  const handleDeleteSubmit = (postId) => (event) => {
     event.preventDefault();
     console.log(postId);
-    axios.post("https://bloginserver.onrender.com/delete", {userId, postId},{ withCredentials: true })
-    .then((res)=>{
-      if(res.data.success){
-        console.log(res.data);
-        setYourBlogs(yourBlogs.filter((blog) => blog.post_id !== postId));
-        alert(res.data.message);
-        navigate("/yourpost");
-      }else{
-        alert("Error deleting the post");
-      }
-    }).catch(err=>{
-      console.log("This is the error in the delete section", err);
-      alert("Error Deleting the post");
-    })
-  }
+    axios
+      .post(
+        "https://bloginserver.onrender.com/delete",
+        { userId, postId },
+        { withCredentials: true }
+      )
+      .then((res) => {
+        if (res.data.success) {
+          console.log(res.data);
+          setYourBlogs(yourBlogs.filter((blog) => blog.post_id !== postId));
+          alert(res.data.message);
+          navigate("/yourpost");
+        } else {
+          alert("Error deleting the post");
+        }
+      })
+      .catch((err) => {
+        console.log("This is the error in the delete section", err);
+        alert("Error Deleting the post");
+      });
+  };
 
   return (
     <>
@@ -72,13 +82,22 @@ function YourPost({userId}) {
                     : blog.post_content.slice(0, 100) + "..."}
                 </p>
               </div>
-              <button onClick={() => toggleExpand(i)} className="btn-element">
-                {expandedPosts[i] ? "Read Less" : "Read More"}
-              </button>
-              <div>
-                <form onSubmit={handleDeleteSubmit (blog.post_id)}>
-                <button className="btn-element delete-btn" type="submit">Delete</button>
-                </form>
+              <div className="yourpost-btns">
+                <div>
+                  <button
+                    onClick={() => toggleExpand(i)}
+                    className="btn-element"
+                  >
+                    {expandedPosts[i] ? "Read Less" : "Read More"}
+                  </button>
+                </div>
+                <div>
+                  <form onSubmit={handleDeleteSubmit(blog.post_id)}>
+                    <button className="btn-element delete-btn" type="submit">
+                      Delete
+                    </button>
+                  </form>
+                </div>
               </div>
             </div>
           </div>

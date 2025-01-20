@@ -26,27 +26,14 @@
   font-size: larger;
 }
 
-.nav-elements {
-  display: flex;
-  flex-direction: row;
-  text-align: center;
-  justify-content: left;
-  gap: 1rem;
-  align-items: center;
-  padding-right: 10px;
-  font-size: 1rem;
+.navbar > div:nth-child(2) {
+    justify-self: right;
+    padding: 10px;
 }
-
-.nav-childelements ul {
-  display: flex;
-  flex-direction: row;
-  gap: 1rem;
-  justify-content: left;
-  list-style-type: none;
-  font-weight: 300;
-  font-style: normal;
+.hamburger{
+  font-size: 1.5rem;
+  font-weight: bold;
 }
-
 .nav-btn {
   font-weight: 300;
   font-style: normal;
@@ -168,6 +155,12 @@
   border-radius: 20px;
   list-style-type: square;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.yourpost-btns{
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
 
 @media (max-width: 480px) {

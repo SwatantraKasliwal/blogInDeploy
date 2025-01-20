@@ -2,11 +2,13 @@ import express from "express";
 import pkg from "pg";
 import cors from "cors";
 import env from "dotenv";
+import bcrypt from "bcrypt";
 
 env.config();
 const app = express();
 const port = 3000;
 const { Pool } = pkg;
+const saltRounds = 10;
 
 app.use(express.json());
 app.use(
@@ -94,57 +96,80 @@ app.post("/createpost", (req, res) => {
     );
 });
 
-app.post("/login", async (req, res) => {
-  const { username, password } = req.body;
+app.post("/register", async (req, res) => {
+  const { userName, email, password } = req.body;
+
   try {
-    console.log("Received login request for:", username);
-    const result = await db.query("SELECT * FROM userlogin WHERE email = $1", [
-      username,
-    ]);
-    if (result.rows.length == 0) {
-      return res
-        .status(401)
-        .json({ success: false, message: "Your are not register please register" });
-    }else{
-      const user = result.rows[0];
-      const storedPassword = user.password;
-      if (storedPassword === password) {
-        return res.json({
-          success: true,
-          message: "Login successful 😊",
-          userId: user.id,
-          userName: user.username,
-        });
-      } else {
-        return res.json({ success: false, message: "Password Incorrect." });
-      }
-    }
+    // Add debug logging
+    console.log("Original password:", password);
+
+    // Hash the password
+    const hashPass = await bcrypt.hash(password, saltRounds);
+    console.log("Hashed password:", hashPass); // Verify hash is generated
+
+    // Insert user into the database
+    const result = await db.query(
+      "INSERT INTO userlogin(username, email, password) VALUES ($1, $2, $3) RETURNING password",
+      [userName, email, hashPass]
+    );
+
+    // Verify stored hash
+    console.log("Stored password in DB:", result.rows[0].password);
+
+    return res.status(201).json({
+      success: true,
+      message: "Registration successful 😊. Please log in.",
+    });
   } catch (error) {
-    console.error("Error during login:", error);
+    console.error("Error during registration:", error);
     return res.status(500).json({ success: false, message: "Server error." });
   }
 });
 
+app.post("/login", async (req, res) => {
+  const { username, password } = req.body;
 
-app.post("/register", async (req, res) => {
-  const { userName, email, password } = req.body;
-  const checkUser = await db.query("SELECT * FROM userlogin WHERE email=$1", [
-    email,
-  ]);
-  if (checkUser.rows.length > 0) {
-    res.json({
-      success: false,
-      message: "User already exist please try log in",
+  try {
+    // Fetch user by email
+    const result = await db.query("SELECT * FROM userlogin WHERE email = $1", [
+      username,
+    ]);
+
+    if (result.rows.length === 0) {
+      return res.status(401).json({
+        success: false,
+        message: "You are not registered. Please register first.",
+      });
+    }
+
+    const user = result.rows[0];
+    const storedPassword = user.password;
+
+    // Add debug logging
+    console.log("Login attempt - Provided password:", password);
+    console.log("Stored hashed password:", storedPassword);
+
+    // Compare the provided password with the stored hash
+    const isMatch = await bcrypt.compare(password, storedPassword);
+    console.log("Password match:", isMatch);
+
+    if (!isMatch) {
+      return res.status(401).json({
+        success: false,
+        message: "Incorrect password.",
+      });
+    }
+
+    // Successful login
+    return res.json({
+      success: true,
+      message: "Login successful 😊",
+      userId: user.id,
+      userName: user.username,
     });
-  } else {
-    await db.query(
-      "INSERT INTO userlogin(username, email, password) VALUES ($1, $2, $3)",
-      [userName, email, password]
-    );
-  res.json({
-    success: true,
-    message: "Registration Successful 😊 ,please login ",
-  });
+  } catch (error) {
+    console.error("Error during login:", error);
+    return res.status(500).json({ success: false, message: "Server error." });
   }
 });
 
