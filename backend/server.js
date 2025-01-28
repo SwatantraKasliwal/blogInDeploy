@@ -46,7 +46,7 @@ app.get("/", async (req, res) => {
       return res.json(data.rows);
     });
   } catch (error) {
-    console.error("Unexpected error:", error);
+    // console.error("Unexpected error:", error);
     return res.status(500).json({ error: "Unexpected Error" });
   }
 });
@@ -66,7 +66,7 @@ app.post("/yourpost", async (req, res) => {
     );
     return res.json({ success: true, data: result.rows });
   } catch (error) {
-    console.error("Error fetching user posts:", error);
+    // console.error("Error fetching user posts:", error);
     return res.status(500).json({ success: false, message: "Server error." });
   }
 });
@@ -75,7 +75,7 @@ app.post("/yourpost", async (req, res) => {
 app.post("/createpost", (req, res) => {
     const { title, content, authorId } = req.body;
     const postDate = new Date().toISOString().slice(0, 10);
-    console.log("Received Data:", { title, content, authorId, postDate });
+    // console.log("Received Data:", { title, content, authorId, postDate });
     if (!title || !content || !authorId) {
       return res
         .status(400)
@@ -86,7 +86,7 @@ app.post("/createpost", (req, res) => {
       [title, content, postDate, authorId],
       (error, results) => {
         if (error) {
-          console.error("Error inserting post:", error);
+          // console.error("Error inserting post:", error);
           return res
             .status(500)
             .json({ success: false, message: "Database error." });
@@ -101,11 +101,11 @@ app.post("/register", async (req, res) => {
 
   try {
     // Add debug logging
-    console.log("Original password:", password);
+    // console.log("Original password:", password);
 
     // Hash the password
     const hashPass = await bcrypt.hash(password, saltRounds);
-    console.log("Hashed password:", hashPass); // Verify hash is generated
+    // console.log("Hashed password:", hashPass); // Verify hash is generated
 
     // Insert user into the database
     const result = await db.query(
@@ -114,14 +114,14 @@ app.post("/register", async (req, res) => {
     );
 
     // Verify stored hash
-    console.log("Stored password in DB:", result.rows[0].password);
+    // console.log("Stored password in DB:", result.rows[0].password);
 
     return res.status(201).json({
       success: true,
       message: "Registration successful 😊. Please log in.",
     });
   } catch (error) {
-    console.error("Error during registration:", error);
+    // console.error("Error during registration:", error);
     return res.status(500).json({ success: false, message: "Server error." });
   }
 });
@@ -146,12 +146,12 @@ app.post("/login", async (req, res) => {
     const storedPassword = user.password;
 
     // Add debug logging
-    console.log("Login attempt - Provided password:", password);
-    console.log("Stored hashed password:", storedPassword);
+    // console.log("Login attempt - Provided password:", password);
+    // console.log("Stored hashed password:", storedPassword);
 
     // Compare the provided password with the stored hash
     const isMatch = await bcrypt.compare(password, storedPassword);
-    console.log("Password match:", isMatch);
+    // console.log("Password match:", isMatch);
 
     if (!isMatch) {
       return res.status(401).json({
@@ -168,7 +168,7 @@ app.post("/login", async (req, res) => {
       userName: user.username,
     });
   } catch (error) {
-    console.error("Error during login:", error);
+    // console.error("Error during login:", error);
     return res.status(500).json({ success: false, message: "Server error." });
   }
 });
@@ -179,7 +179,7 @@ app.post("/logout", (req, res) => {
 
 app.post("/delete",async (req, res) => {
   const {userId, postId } = req.body;
-  console.log("this is from /delete section: ", userId, postId);
+  // console.log("this is from /delete section: ", userId, postId);
     const result =db.query(
       "DELETE from posts WHERE post_id=$1 AND post_author=$2",
       [postId, userId]);

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 
 function Login({ setIsAuthenticated, setUserId, setProfileName }) {
@@ -82,6 +82,14 @@ function Login({ setIsAuthenticated, setUserId, setProfileName }) {
           Login
         </button>
       </form>
+      <div>
+        New user ?
+        <p>
+          <Link to="/register" className="login-link">
+            Register
+          </Link>
+        </p>
+      </div>
     </div>
   );
 }

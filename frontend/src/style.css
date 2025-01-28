@@ -179,3 +179,14 @@
     margin: 0.8rem;
   }
 }
+
+.login-link {
+  color: #007bff;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.login-link:hover {
+  color: #0056b3;
+  text-decoration: underline;
+}
